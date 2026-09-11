@@ -9,7 +9,6 @@ RagBot is a Retrieval-Augmented Generation (RAG) application that lets you uploa
 - 💬 **Conversational chat UI** — ask questions in natural language and get grounded answers
 - 📚 **Source attribution** — every answer lists the source document(s) it was drawn from
 - 💾 **Persistent vector store** — embeddings persist across sessions via Chroma
-- ⬇️ **Chat history export** — download the conversation as a text file
 
 ## Tech Stack
 
@@ -107,8 +106,3 @@ The backend runs at `http://127.0.0.1:8000` and the Streamlit UI opens automatic
 - Support additional file types (docx, txt, web pages)
 - Add streaming responses for the chat UI
 - Containerize with Docker Compose for one-command setup
-- Add automated tests for the ingestion and query pipeline
-
-## License
-
-Add a license of your choice (e.g., MIT) if you plan to share this publicly.
