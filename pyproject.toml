@@ -1,7 +1,7 @@
 [project]
 name = "rag-doc-qa"
 version = "0.1.0"
-description = "Add your description here"
+description = "RAG-based PDF chatbot with FastAPI backend and Streamlit frontend"
 readme = "README.md"
 authors = [
     { name = "riteshsal", email = "riteshsalve86@gmail.com" }
@@ -28,11 +28,3 @@ dependencies = [
     "streamlit>=1.63.0",
     "uvicorn[standard]>=0.52.4",
 ]
-
-
-[project.scripts]
-rag-doc-qa = "rag-doc-qa:main"
-
-[build-system]
-requires = ["uv_build>=0.12.5,<0.13.0"]
-build-backend = "uv_build"
