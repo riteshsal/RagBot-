@@ -6,7 +6,9 @@ from modules.load_vectorstore import load_vectorstore
 from modules.llm import get_llm_chain
 from modules.query_handlers import query_chain
 from logger import logger
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app=FastAPI(title="RagBot")
 
@@ -42,12 +44,14 @@ async def ask_question(question:str=Form(...)):
     try:
         logger.info("user query:{question}")
         from langchain_chroma import Chroma
-        from langchain_huggingface import HuggingFaceEmbeddings
+        from langchain_huggingface import HuggingFaceEndpointEmbeddings
         from modules.load_vectorstore import PERSIST_DIR
 
         vectorstore=Chroma(
             persist_directory=PERSIST_DIR,
-            embedding_function=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+            embedding_function=HuggingFaceEndpointEmbeddings( model="sentence-transformers/all-MiniLM-L6-v2",
+            task="feature-extraction",
+            huggingfacehub_api_token=os.environ["HUGGINGFACEHUB_API_TOKEN"])
         )
         chain=get_llm_chain(vectorstore)
         result=query_chain(chain,question)
