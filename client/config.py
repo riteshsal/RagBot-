@@ -1,1 +1,1 @@
-API_URL="https://ragbotqanda.onrender.com"
+API_URL="http://localhost:8501"
