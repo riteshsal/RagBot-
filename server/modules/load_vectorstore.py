@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -26,9 +26,9 @@ def load_vectorstore(uploaded_files):
     splitter=RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
     texts=splitter.split_documents(docs)
 
-    embeddings=HuggingFaceEndpointEmbeddings( model="sentence-transformers/all-MiniLM-L6-v2",
-    task="feature-extraction",
-    huggingfacehub_api_token=os.environ["HUGGINGFACEHUB_API_TOKEN"])
+    embeddings = FastEmbedEmbeddings(
+    model_name="BAAI/bge-small-en-v1.5"
+    )
 
     if os.path.exists(PERSIST_DIR) and os.listdir(PERSIST_DIR):
         vectorstore=Chroma(persist_directory=PERSIST_DIR,embedding_function=embeddings)

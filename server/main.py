@@ -2,10 +2,12 @@ from fastapi import FastAPI,UploadFile,File,Form,Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
-from modules.load_vectorstore import load_vectorstore
+from modules.load_vectorstore import load_vectorstore,PERSIST_DIR
 from modules.llm import get_llm_chain
 from modules.query_handlers import query_chain
 from logger import logger
+from langchain_chroma import Chroma
+from langchain_community.embeddings import FastEmbedEmbeddings
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -43,15 +45,14 @@ async def upload_pdfs(files:List[UploadFile]=File(...)):
 async def ask_question(question:str=Form(...)):
     try:
         logger.info("user query:{question}")
-        from langchain_chroma import Chroma
-        from langchain_huggingface import HuggingFaceEndpointEmbeddings
-        from modules.load_vectorstore import PERSIST_DIR
 
-        vectorstore=Chroma(
+        embeddings = FastEmbedEmbeddings(
+            model_name="BAAI/bge-small-en-v1.5"
+        )
+
+        vectorstore = Chroma(
             persist_directory=PERSIST_DIR,
-            embedding_function=HuggingFaceEndpointEmbeddings( model="sentence-transformers/all-MiniLM-L6-v2",
-            task="feature-extraction",
-            huggingfacehub_api_token=os.environ["HUGGINGFACEHUB_API_TOKEN"])
+            embedding_function=embeddings
         )
         chain=get_llm_chain(vectorstore)
         result=query_chain(chain,question)
